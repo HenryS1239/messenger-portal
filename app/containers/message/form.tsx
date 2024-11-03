@@ -1,5 +1,5 @@
 import { PortalContent } from "@/app/components/contents";
-import { Button, Col, Divider, Form, Input, Row, Select, InputNumber } from "antd";
+import { Button, Col, Divider, Form, Input, Row, Select, InputNumber, Checkbox } from "antd";
 import React, { useEffect, useState } from "react";
 import { api, ui } from "@/app/services";
 import { useRouter } from "next/router";
@@ -40,7 +40,11 @@ export const MessageBroadcastForm: React.FC<{ id?: string }> = (props) => {
       setFormValues(values);
     },
     onFinish: (values: any) => {
-      handlers.submit(values);
+      if (!values.selectAll && !values.receipient) {
+        ui.notify.error("Please at least select 1 receipient before submission");
+      } else {
+        handlers.submit(values);
+      }
     },
   };
 
@@ -64,17 +68,10 @@ export const MessageBroadcastForm: React.FC<{ id?: string }> = (props) => {
             <Form.Item label="Content" name="content">
               <Input.TextArea rows={4} />
             </Form.Item>
-            <Form.Item
-              label="Receipients"
-              name="receipient"
-              required
-              rules={[
-                {
-                  required: true,
-                  message: "Receipients is required.",
-                },
-              ]}
-            >
+            <Form.Item label="" name="selectAll" valuePropName="checked">
+              <Checkbox>Select All</Checkbox>
+            </Form.Item>
+            <Form.Item label="Receipients" name="receipient">
               <SelectUser />
             </Form.Item>
           </Col>
