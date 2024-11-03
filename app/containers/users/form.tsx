@@ -90,11 +90,8 @@ export const UserForm: React.FC<{ id?: string }> = (props) => {
 
   useEffect(() => {
     handlers.refresh();
-  }, []);
-
-  useEffect(() => {
     handlers.reloadSelectors();
-  }, [formValues]);
+  }, []);
 
   const formProps: FormProps = {
     layout: "vertical",

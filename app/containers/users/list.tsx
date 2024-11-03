@@ -101,7 +101,7 @@ export const List: React.FC<any> = () => {
       });
     },
     setDisable: async (id: string, disabled: boolean) => {
-      ui.confirm(`Are you sure you want to ${!disabled ? "unblock" : "block"} this user?`, async () => {
+      ui.confirm(`Are you sure you want to ${!disabled ? "block" : "unblock"} this user?`, async () => {
         try {
           setLoading(true);
           await api.user.admin.status(id, {
