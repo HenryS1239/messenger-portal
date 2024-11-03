@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Input } from "antd";
+import { Button, Space } from "antd";
 import { CloseOutlined, SearchOutlined } from "@ant-design/icons";
 
 type ButtonGroupInterface = {
@@ -15,7 +15,7 @@ export const SearchButtonGroup = (props: ButtonGroupInterface) => {
   const { showAdvancedFilter, setShowAdvancedFilter, loading, setFilters, pagination, setPagination, form } = props;
 
   return (
-    <Input.Group compact>
+    <Space.Compact>
       <Button htmlType="submit" icon={<SearchOutlined />} loading={loading} style={{ color: "green" }} />
       <Button
         icon={<CloseOutlined />}
@@ -37,6 +37,6 @@ export const SearchButtonGroup = (props: ButtonGroupInterface) => {
           Advanced Search
         </Button>
       )}
-    </Input.Group>
+    </Space.Compact>
   );
 };
