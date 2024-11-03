@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Button, Dropdown, DropdownProps, Menu, Select, SelectProps } from "antd";
 import { api, ui } from "@/app/services";
 import { IPagination } from "../models/ui.models";
+import { USER_TYPES } from "../constants";
 
 export const SelectUser: React.FC<any> = (props) => {
   const { value, showSearch = true, optionFilterProp = "label", ...selectProps } = props;
@@ -18,9 +19,14 @@ export const SelectUser: React.FC<any> = (props) => {
   const handlers = {
     getUsers: async () => {
       try {
-        const users = await api.user.admin.list({
-          ...pagination,
-        });
+        const users = await api.user.admin.list(
+          {
+            ...pagination,
+          },
+          {
+            types: USER_TYPES.CUSTOMER,
+          }
+        );
         if (users.total > 0) {
           setPagination((values) => {
             return {

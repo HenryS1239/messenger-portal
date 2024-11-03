@@ -39,12 +39,12 @@ export const UserRoleForm: React.FC<{ id?: string }> = (props) => {
           } else {
             await api.user.role.create(values);
             ui.notify.success(`Created`);
-            router.push(`/admin/users/role`);
           }
         } catch (err) {
           ui.notify.error(err);
         } finally {
           setLoading(false);
+          router.push(`/admin/users/role`);
         }
       });
     },

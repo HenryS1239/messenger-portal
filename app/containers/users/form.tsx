@@ -21,13 +21,14 @@ export const UserForm: React.FC<{ id?: string }> = (props) => {
     offices: [],
   });
   const [formValues, setFormValues] = useState<any>();
+  const [userForm] = Form.useForm();
 
   const router = useRouter();
 
   const handlers = {
     reloadSelectors: async () => {
       try {
-        const role = await api.user.role.list({ pageSize: 5000, current: 1 }, { type: [USER_TYPES.ADMIN] });
+        const role = await api.user.role.list({ pageSize: 5000, current: 1 });
         if (role.items.length === 0) {
           throw Error("Please proceed to create role");
         }
@@ -70,12 +71,12 @@ export const UserForm: React.FC<{ id?: string }> = (props) => {
           } else {
             await api.user.admin.create(values);
             ui.notify.success(`Created User`);
-            router.push(`/portal/users/management`);
           }
         } catch (err) {
           ui.notify.error(err);
         } finally {
           setLoading(false);
+          router.push(`/admin/users/management`);
         }
       });
     },
@@ -95,7 +96,6 @@ export const UserForm: React.FC<{ id?: string }> = (props) => {
     handlers.reloadSelectors();
   }, [formValues]);
 
-  const [userForm] = Form.useForm();
   const formProps: FormProps = {
     layout: "vertical",
     form: userForm,
@@ -181,41 +181,39 @@ export const UserForm: React.FC<{ id?: string }> = (props) => {
                 <Select options={selectors.roles} />
               </Form.Item>
 
-              {isCreate && (
-                <>
-                  <Form.Item
-                    label="Password"
-                    name="password"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Password is required.",
+              <>
+                <Form.Item
+                  label="Password"
+                  name="password"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Password is required.",
+                    },
+                  ]}
+                >
+                  <Input.Password placeholder="New Password" />
+                </Form.Item>
+                <Form.Item
+                  label={"Retype New Password"}
+                  name={"retype_password"}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please retype the user password",
+                    },
+                    {
+                      validator: async (rule, value) => {
+                        if (value !== userForm.getFieldValue("password")) {
+                          throw new Error("Passwords do not match!");
+                        }
                       },
-                    ]}
-                  >
-                    <Input.Password placeholder="New Password" />
-                  </Form.Item>
-                  <Form.Item
-                    label={"Retype New Password"}
-                    name={"retype_password"}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please retype the user password",
-                      },
-                      {
-                        validator: async (rule, value) => {
-                          if (value !== userForm.getFieldValue("password")) {
-                            throw new Error("Passwords do not match!");
-                          }
-                        },
-                      },
-                    ]}
-                  >
-                    <Input.Password placeholder="Retype new Password" />
-                  </Form.Item>
-                </>
-              )}
+                    },
+                  ]}
+                >
+                  <Input.Password placeholder="Retype new Password" />
+                </Form.Item>
+              </>
 
               <Form.Item>
                 <Space size={8}>

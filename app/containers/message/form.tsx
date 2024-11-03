@@ -8,10 +8,9 @@ import { USER_TYPES } from "../../constants";
 import { SelectUser } from "../../components/selectors";
 
 export const MessageBroadcastForm: React.FC<{ id?: string }> = (props) => {
-  const { id } = props;
-
   const [loading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState<any>();
+  const [form] = Form.useForm();
 
   const router = useRouter();
 
@@ -20,7 +19,6 @@ export const MessageBroadcastForm: React.FC<{ id?: string }> = (props) => {
       ui.confirm(`Are you sure you want to submit?`, async () => {
         setLoading(true);
         try {
-          values.type = USER_TYPES.ADMIN;
           await api.message.create(values);
           ui.notify.success(`Message Broadcasted`);
           router.push(`./`);
@@ -33,7 +31,6 @@ export const MessageBroadcastForm: React.FC<{ id?: string }> = (props) => {
     },
   };
 
-  const [form] = Form.useForm();
   const formProps: FormProps = {
     layout: "vertical",
     form: form,
@@ -48,7 +45,7 @@ export const MessageBroadcastForm: React.FC<{ id?: string }> = (props) => {
   };
 
   return (
-    <PortalContent back={true} title={"Broadcast New Message "} loading={loading}>
+    <PortalContent back={"/admin/message"} title={"Broadcast New Message"} loading={loading}>
       <Form {...formProps}>
         <Row>
           <Col span={12}>

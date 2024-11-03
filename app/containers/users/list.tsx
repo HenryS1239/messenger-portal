@@ -72,7 +72,6 @@ export const List: React.FC<any> = () => {
         if (user) {
           const rs = await api.user.admin.list(pagination, {
             ...filters,
-            type: [USER_TYPES.ADMIN],
           });
           const removeCurrentUser = rs.items.filter((acc: any) => acc._id !== user._id);
           setPagination({
@@ -120,7 +119,7 @@ export const List: React.FC<any> = () => {
   };
 
   const extra = (
-    <Button style={{ width: 80 }} type="primary" href="/portal/users/management/create">
+    <Button style={{ width: 80 }} type="primary" href="/admin/users/management/create">
       New
     </Button>
   );
@@ -132,7 +131,7 @@ export const List: React.FC<any> = () => {
   const [filterForm] = useForm();
 
   return (
-    <PortalContent title="User Management" extra={extra} loading={loading} subTitle="Create and assign users based on roles to manage project.">
+    <PortalContent title="User Management" extra={extra} loading={loading}>
       <Row>
         <Col span={24}>
           <Form
