@@ -1,2 +1,2 @@
 export { List } from "./list";
-export { OfficeManagementForm as Form } from "./form";
+export { MessageBroadcastForm as Form } from "./form";

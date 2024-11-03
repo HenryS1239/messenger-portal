@@ -7,7 +7,7 @@ import { Auth } from "./auth";
 import { Setting } from "./setting";
 
 import { User } from "./user";
-import { Office } from "./office";
+import { Message } from "./message";
 import { Log } from "./log";
 import { Notifications } from "./notifications";
 
@@ -69,7 +69,7 @@ export const services = {
   auth: new Auth(http),
   setting: new Setting(http),
   user: new User(http),
-  office: new Office(http),
+  message: new Message(http),
   log: new Log(http),
   notification: new Notifications(http),
 };

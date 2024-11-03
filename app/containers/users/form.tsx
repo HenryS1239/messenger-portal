@@ -28,16 +28,12 @@ export const UserForm: React.FC<{ id?: string }> = (props) => {
     reloadSelectors: async () => {
       try {
         const role = await api.user.role.list({ pageSize: 5000, current: 1 }, { type: [USER_TYPES.ADMIN] });
-        const office = await api.office.list({ pageSize: 5000, current: 1 }, { type: USER_TYPES.ADMIN });
-        if (role.items.length === 0 && office.items.length === 0) {
-          throw Error("Please create role and office!");
+        if (role.items.length === 0) {
+          throw Error("Please proceed to create role");
         }
         setSelectors({
           ...selectors,
           roles: role.items.map((r: any) => {
-            return { label: r.name, value: r._id };
-          }),
-          offices: office.items.map((r: any) => {
             return { label: r.name, value: r._id };
           }),
         });
@@ -83,21 +79,6 @@ export const UserForm: React.FC<{ id?: string }> = (props) => {
         }
       });
     },
-    change_password: (password: string) => {
-      if (password && id) {
-        ui.confirm(`Are you sure you want to update this user password?`, async () => {
-          try {
-            // await api.user.admin.update.single(id, { password });
-            ui.notify.success(`Updated new password`);
-            await handlers.refresh();
-          } catch (err) {
-            ui.notify.error(err);
-          } finally {
-            setLoading(false);
-          }
-        });
-      }
-    },
   };
 
   useEffect(() => {
@@ -129,12 +110,12 @@ export const UserForm: React.FC<{ id?: string }> = (props) => {
   };
 
   return (
-    <PortalContent back={true} title={isCreate ? "Add a New Admin" : "Update Admin"} loading={loading}>
+    <PortalContent back={true} title={isCreate ? "Add a New User" : "Update User"} loading={loading}>
       <Row>
         <Col span={12}>
           {ready && (
             <Form {...formProps}>
-              <Divider orientation="left">Admin Information</Divider>
+              <Divider orientation="left">User Information</Divider>
 
               <Form.Item
                 label="Username"
@@ -172,19 +153,6 @@ export const UserForm: React.FC<{ id?: string }> = (props) => {
                 ]}
               >
                 <Input maxLength={11} className="remove-input-num-arrow" type="number" />
-              </Form.Item>
-
-              <Form.Item
-                label="Office"
-                name="company"
-                rules={[
-                  {
-                    required: true,
-                    message: "Office is required.",
-                  },
-                ]}
-              >
-                <Select options={selectors.offices} />
               </Form.Item>
 
               <Divider />

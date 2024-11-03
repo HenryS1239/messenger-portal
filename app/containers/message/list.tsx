@@ -45,9 +45,8 @@ export const List = () => {
     refresh: async () => {
       setLoading(true);
       try {
-        const rs = await api.office.list(pagination, {
+        const rs = await api.message.list(pagination, {
           ...filters,
-          type: USER_TYPES.ADMIN,
         });
         setPagination({
           ...pagination,
