@@ -12,6 +12,7 @@ Messenger Portal UI built by [NextJS](https://nextjs.org/) framework TypeScript 
 NPM version: 9.6.4 <br/> Node version: 20.0.0
 
 ```bash
+Install Packages
 $ yarn
 ```
 
