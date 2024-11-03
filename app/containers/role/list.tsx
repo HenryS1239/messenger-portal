@@ -37,20 +37,22 @@ export const List = () => {
     {
       title: "Actions",
       width: 100,
-      align: "right",
+      align: "center",
       render: (r: any) => {
         return (
           <Space size={2}>
             <ListingButton href={`/admin/users/role/edit/${r._id}`} icon={<EditOutlined />} tooltipMsg="Edit" />
-            <ListingButton
-              tooltipMsg="Delete"
-              icon={<DeleteOutlined />}
-              onClick={() => handlers.delete(r._id)}
-              additionalProps={{
-                className: "table-column-actions-button",
-                danger: true,
-              }}
-            />
+            {r?.canDelete && (
+              <ListingButton
+                tooltipMsg="Delete"
+                icon={<DeleteOutlined />}
+                onClick={() => handlers.delete(r._id)}
+                additionalProps={{
+                  className: "table-column-actions-button",
+                  danger: true,
+                }}
+              />
+            )}
           </Space>
         );
       },
