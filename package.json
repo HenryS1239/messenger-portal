@@ -1,0 +1,47 @@
+{
+  "name": "portal-ui",
+  "version": "1.0.0",
+  "description": "Portal UI",
+  "private": true,
+  "scripts": {
+    "dev": "next -p 8011",
+    "start": "next start -p 8011",
+    "build": "next build",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@ant-design/charts": "^1.4.2",
+    "@ant-design/pro-components": "^2.8.1",
+    "@types/lodash": "^4.14.182",
+    "antd": "5.21.0",
+    "axios": "^0.26.1",
+    "less": "^4.1.2",
+    "less-loader": "^10.2.0",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.2",
+    "moment-timezone": "^0.5.34",
+    "next": "12.1.4",
+    "next-compose-plugins": "^2.2.1",
+    "next-images": "^1.8.4",
+    "next-with-less": "^2.0.5",
+    "react": "18.0.0",
+    "react-dom": "18.0.0",
+    "react-icons": "^4.8.0",
+    "react-quill": "^1.3.5",
+    "react-redux": "^7.2.8",
+    "redux-persist": "^6.0.0",
+    "suneditor": "^2.44.3",
+    "suneditor-react": "^3.4.1",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@types/node": "17.0.23",
+    "@types/react": "17.0.43",
+    "@types/react-dom": "17.0.14",
+    "typescript": "5.4.2"
+  },
+  "resolutions": {
+    "@types/react": "17.0.43",
+    "@types/react-dom": "17.0.14"
+  }
+}

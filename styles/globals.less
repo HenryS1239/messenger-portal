@@ -1,0 +1,120 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.root-header {
+  background-color: white;
+  line-height: 48px;
+  height: 48px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.wt-main-header {
+  background-color: white;
+}
+
+.wt-portal-content {
+  min-height: 75vh;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.make-margins(@breakpoint, @size: 50, @decrement: 10) when (@size >= 0) {
+  .make-margins(@breakpoint, @size - @decrement);
+
+  @size-px: ~"@{size}px";
+
+  .m@{size}-@{breakpoint} {
+    margin: @size-px;
+  }
+  .mt@{size}-@{breakpoint} {
+    margin-top: @size-px;
+  }
+  .mr@{size}-@{breakpoint} {
+    margin-right: @size-px;
+  }
+  .mb@{size}-@{breakpoint} {
+    margin-bottom: @size-px;
+  }
+  .ml@{size}-@{breakpoint} {
+    margin-left: @size-px;
+  }
+
+  .mx@{size}-@{breakpoint} {
+    margin-left: @size-px;
+    margin-right: @size-px;
+  }
+
+  .my@{size}-@{breakpoint} {
+    margin-top: @size-px;
+    margin-bottom: @size-px;
+  }
+}
+.make-margins(xs);
+
+.make-paddings(@breakpoint, @size: 50, @decrement: 10) when (@size >= 0) {
+  .make-paddings(@breakpoint, @size - @decrement);
+
+  @size-px: ~"@{size}px";
+
+  .p@{size}-@{breakpoint} {
+    padding: @size-px;
+  }
+  .pt@{size}-@{breakpoint} {
+    padding-top: @size-px;
+  }
+  .pr@{size}-@{breakpoint} {
+    padding-right: @size-px;
+  }
+  .pb@{size}-@{breakpoint} {
+    padding-bottom: @size-px;
+  }
+  .pl@{size}-@{breakpoint} {
+    padding-left: @size-px;
+  }
+
+  .px@{size}-@{breakpoint} {
+    padding-left: @size-px;
+    padding-right: @size-px;
+  }
+
+  .py@{size}-@{breakpoint} {
+    padding-top: @size-px;
+    padding-bottom: @size-px;
+  }
+}
+
+.make-paddings(xs);
+
+/* Chrome, Safari, Edge, Opera */
+input.remove-input-num-arrow::-webkit-outer-spin-button,
+input.remove-input-num-arrow::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input.remove-input-num-arrow[type="number"] {
+  -moz-appearance: textfield;
+}
