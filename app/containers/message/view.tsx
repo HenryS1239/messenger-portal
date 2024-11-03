@@ -50,25 +50,21 @@ export const MessageViewDetails: React.FC<{ id?: string }> = (props) => {
     {
       key: "subject",
       label: "Subject",
-      span: 3,
       children: formValues?.subject,
     },
     {
       key: "createdAt",
       label: "Received At",
-      span: 3,
       children: formatter.toDisplayDatetime(formValues?.createdAt),
     },
     {
       key: "readBy",
       label: "Read By",
-      span: 3,
       children: formValues?.readBy.map((user: any) => <ReadByUserDetails user={user} />),
     },
     {
       key: "content",
       label: "Content",
-      span: 3,
       children: <p>{formValues?.content}</p>,
     },
   ];
@@ -77,25 +73,21 @@ export const MessageViewDetails: React.FC<{ id?: string }> = (props) => {
     {
       key: "subject",
       label: "Subject",
-      span: 3,
       children: <>{formValues?.subject}</>,
     },
     {
       key: "createdAt",
       label: "Received At",
-      span: 3,
       children: <>{formatter.toDisplayDatetime(formValues?.createdAt)}</>,
     },
     {
       key: "readAt",
       label: "Read At",
-      span: 3,
       children: formatter.toDisplayDatetime(formValues?.readBy.find((readUser: any) => readUser.userRefId == user._id)?.readAt) ?? "-",
     },
     {
       key: "content",
       label: "Content",
-      span: 3,
       children: <p>{formValues?.content}</p>,
     },
   ];

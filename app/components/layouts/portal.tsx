@@ -1,139 +1,57 @@
 import React, { useEffect, useState } from "react";
-import { Layout, Menu, Typography, Space, Row, Col, Button, Badge } from "antd";
-import { PORTAL_MENU, IMenu } from "@/app/menus";
+import { Layout, Typography, Space, Row, Col, Button, Dropdown } from "antd";
+import { PORTAL_MENU } from "@/app/menus";
 import { APP } from "@/app/config";
-import { useAppAuthStore } from "@/stores/index";
-import { BellOutlined, LogoutOutlined } from "@ant-design/icons";
+import { REDUX_ACTIONS, useAppAuthStore } from "@/stores/index";
+import { DownOutlined, LogoutOutlined } from "@ant-design/icons";
 import { api, ui } from "@/app/services";
 import { useLogout } from "@/stores/dispatchers";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import { AuthGuard } from "../guards";
-import { capitalize, isEmpty } from "lodash";
+import { capitalize } from "lodash";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import { initializeApp } from "firebase/app";
 import { USER_TYPES } from "../../constants";
+import { useDispatch } from "react-redux";
 
-// const Menus = () => {
-//   const { user } = useAppAuthStore();
+const Menus = () => {
+  const router = useRouter();
 
-//   const acl = UserPermissions(user);
-
-//   const router = useRouter();
-
-//   const toMenu = (menu: IMenu, inheritId: string = "") => {
-//     const key = inheritId ? `${inheritId}${MENU_KEY_SEP}${menu.id}` : `${menu.id}`;
-
-//     const allowed = user?.role?.permissions.includes(menu.id);
-
-//     if (allowed) {
-//       if (menu.children && menu.children.length > 0) {
-//         return (
-//           <Menu.SubMenu style={{ color: "#fff" }} title={menu.name} key={key} icon={menu.icon}>
-//             {menu.children.map((c) => toMenu(c, key))}
-//           </Menu.SubMenu>
-//         );
-//       }
-//       return (
-//         <Menu.Item icon={menu.icon} key={key}>
-//           <span>
-//             {menu.path && (
-//               <Link href={menu.path}>
-//                 <a>{menu.name}</a>
-//               </Link>
-//             )}
-//             {!menu.path && menu.name}
-//           </span>
-//         </Menu.Item>
-//       );
-//     }
-//   };
-
-//   const pathname = router.pathname;
-
-//   const subMenusCheck = (menus: IMenu[], parent: string): any => {
-//     return menus
-//       .map((m) => {
-//         const key = `${parent}${MENU_KEY_SEP}${m.id}`;
-//         const isSamePath = () => m?.path === pathname;
-//         const isMatchPattern = () => {
-//           if (m?.pattern) {
-//             return pathname.match(m.pattern);
-//           }
-//           return false;
-//         };
-
-//         if (isSamePath() || isMatchPattern()) {
-//           return { ...m, menu_key: key };
-//         }
-//         if (m.children && m.children?.length > 0) {
-//           return subMenusCheck(m.children, key);
-//         }
-//         return null;
-//       })
-//       .filter((v) => !!v);
-//   };
-
-//   const selectedChildKeys = PORTAL_MENU.map<any>((menu) => {
-//     const isSamePath = () => menu?.path === pathname;
-//     const isMatchPattern = () => {
-//       if (menu?.pattern) {
-//         return pathname.match(menu.pattern);
-//       }
-//       return false;
-//     };
-//     if (menu.children && menu.children?.length > 0) {
-//       return subMenusCheck(menu.children, `${menu.id}`);
-//     }
-//     if (isSamePath() || isMatchPattern()) {
-//       return { ...menu, menu_key: menu.id };
-//     }
-//     return null;
-//   })
-//     .filter((v) => !!v)
-//     .flat(2)
-//     .map((d) => d.menu_key);
-
-//   // support 2 layers keys only (first prefix always is parent)
-//   const selectedParentKeys = selectedChildKeys.map((k) => `${k}`.split(MENU_KEY_SEP)?.[0]);
-//   const selectedKeys = selectedParentKeys.concat(selectedChildKeys).filter((v, i, self) => self.indexOf(v) === i);
-//   return (
-//     <div className="menu">
-//       <Menu
-//         style={{
-//           minHeight: "25vh",
-//         }}
-//         mode="inline"
-//         defaultSelectedKeys={selectedKeys}
-//         theme="dark"
-//         defaultOpenKeys={selectedKeys}
-//       >
-//         {[USER_TYPES.ADMIN, USER_TYPES.SUPER_ADMIN].includes(user?.type) &&
-//           PORTAL_MENU.map((menu) => {
-//             // TODO: filter menu with user role permission
-
-//             const allowed = user?.role?.permissions.includes(menu.id);
-
-//             if (allowed) {
-//               return toMenu(menu);
-//               // } else {
-//               //     const key = `${menu.id}`;
-//               //     return (
-//               //         <Menu.SubMenu title={menu.name} key={key} icon={menu.icon}>
-//               //             {toMenu(menu, key)}
-//               //         </Menu.SubMenu>
-//               //     );
-//               // }
-//             }
-//           }).filter((v) => !!v)}
-//       </Menu>
-//     </div>
-//   );
-// };
+  return (
+    <Space>
+      {PORTAL_MENU.map((menu: any) => {
+        if (menu.children) {
+          return (
+            <Col key={menu.id}>
+              <Dropdown menu={{ items: menu.children }}>
+                <Button type="link">
+                  <Space>
+                    {menu.name}
+                    <DownOutlined />
+                  </Space>
+                </Button>
+              </Dropdown>
+            </Col>
+          );
+        } else {
+          return (
+            <Col key={menu.id}>
+              <Button type="link" onClick={() => router.push(menu.path)}>
+                <Space>{menu.name}</Space>
+              </Button>
+            </Col>
+          );
+        }
+      })}
+    </Space>
+  );
+};
 
 const AppHeader: React.FC<any> = () => {
   const { user } = useAppAuthStore();
   const isSupported = () => "Notification" in window && "serviceWorker" in navigator && "PushManager" in window;
+  const isOptIn = user?.isNotification;
+  const dispatch = useDispatch();
 
   const router = useRouter();
   const logout = useLogout();
@@ -169,8 +87,23 @@ const AppHeader: React.FC<any> = () => {
           onMessage(fcmMessaging, (payload: any) => {
             new Notification(payload.data.title, {
               body: payload.data.body,
+              icon: "/resources/img/messenger-icon-4.jpg",
             });
             window.location.reload();
+          });
+        }
+      });
+    },
+    optInOut: async () => {
+      ui.confirm(`Are you sure you want to ${isOptIn ? "opt out" : "opt in"} for notifications?`, async () => {
+        try {
+          await api.auth.optInOut();
+          ui.notify.success(`Preference Updated`);
+        } catch (err) {
+          ui.notify.error(err);
+        } finally {
+          api.auth.profile().then((user) => {
+            dispatch({ type: REDUX_ACTIONS.SET_USER, payload: { user } });
           });
         }
       });
@@ -188,7 +121,7 @@ const AppHeader: React.FC<any> = () => {
       <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet"></link>
       <Row justify="start" style={{ padding: "0px 20px 0px 20px", justifyContent: "space-between" }}>
         <Col>
-          <Row align="middle">
+          <Row align="middle" gutter={[12, 12]}>
             <Col style={{ display: "flex", justifyContent: "center" }}>
               <img className="logo" alt="Logo" src="/resources/img/messenger-icon-4.jpg" style={{ height: 64 }} />
             </Col>
@@ -207,10 +140,18 @@ const AppHeader: React.FC<any> = () => {
                 {userType} Portal
               </Typography.Title>
             </Col>
+            {userType === "Admin" && <Space>{Menus()}</Space>}
           </Row>
         </Col>
-        {userType === "Admin" && <Col></Col>}
+
         <Col>
+          {userType === "Customer" && (
+            <Space>
+              <Button type="link" onClick={handlers.optInOut}>
+                {isOptIn ? "Opt-out for Notifications" : "Opt-in for Notifications"}
+              </Button>
+            </Space>
+          )}
           <Button
             type="link"
             icon={<LogoutOutlined />}

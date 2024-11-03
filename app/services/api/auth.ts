@@ -7,17 +7,21 @@ import { IMessage } from "@/app/models/ui.models";
 
 export class Auth extends Base {
   login(credential: { email: string; password: string }) {
-    return this.http.post<any, { token: string }>("/api/core/auth/login", credential).then((rs) => {
+    return this.http.post<any, { token: string }>("/api/auth/login", credential).then((rs) => {
       storage.local.set(STORAGE_KEYS.ACCESS_TOKEN, rs.token);
     });
   }
 
   registerFCM(body: { fcmToken: string; isNotification: true }) {
-    return this.http.post<any, { token: string }>("/api/core/auth/fcm", body);
+    return this.http.post<any, { token: string }>("/api/auth/fcm", body);
+  }
+
+  optInOut() {
+    return this.http.post<any, { token: string }>("/api/auth/opt-in-out");
   }
 
   profile() {
-    return this.http.get<any, { user: IUser }>("/api/core/auth/profile");
+    return this.http.get<any, { user: IUser }>("/api/auth/profile");
   }
 
   get token() {
@@ -33,7 +37,7 @@ export class Auth extends Base {
 
   logout(): Promise<IMessage> {
     return new Promise(async (resolve, reject) => {
-      await this.http.get<any, any>("/api/core/auth/logout");
+      await this.http.get<any, any>("/api/auth/logout");
       this.token.clear();
       resolve({ message: "success" });
     });
