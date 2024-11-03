@@ -5,12 +5,14 @@
 
 ## Description
 
-Buildes Portal UI built by [NextJS](https://nextjs.org/) framework TypeScript starter repository.
+Messenger Portal UI built by [NextJS](https://nextjs.org/) framework TypeScript starter repository.<br/> Allows admin to add users into the system, broadcast messages to them and users can receive and view messages via browser notifications.
 
 ## Installation
 
+NPM version: 9.6.4 <br/> Node version: 20.0.0
+
 ```bash
-$ yarn install
+$ yarn
 ```
 
 ## Running the app
