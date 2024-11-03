@@ -1,10 +1,10 @@
 export interface IMessage {
-    type?: "info" | "error" | "warning";
-    message: string;
+  type?: "info" | "error" | "warning";
+  message: string;
 }
 
 export interface IPagination {
-    total?: number | undefined;
-    pageSize: number | undefined;
-    current: number | undefined;
+  total?: number | undefined;
+  pageSize: number | undefined;
+  current: number | undefined;
 }

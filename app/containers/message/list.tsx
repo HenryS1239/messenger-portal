@@ -3,10 +3,11 @@ import { Button, Col, Form, Input, Row, Space, Table } from "antd";
 import { useEffect, useState } from "react";
 import { IPagination } from "@/app/models/ui.models";
 import { api, ui } from "@/app/services";
-import { EditOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useForm } from "antd/lib/form/Form";
 import { USER_TYPES } from "../../constants";
 import { SearchButtonGroup } from "../../components/form";
+import { ListingButton } from "../../components/listing/button";
 
 export const List = () => {
   const [loading, setLoading] = useState(false);
@@ -20,11 +21,19 @@ export const List = () => {
 
   const columns = [
     {
-      dataIndex: "receiver",
+      dataIndex: "receipient",
       title: "Receiver Name",
+      render: (r: any) => {
+        const names = r.map((receipient: any) => receipient.name);
+        return names.join(",");
+      },
     },
     {
-      dataIndex: "message",
+      dataIndex: "subject",
+      title: "Subject",
+    },
+    {
+      dataIndex: "content",
       title: "Message",
     },
     {
@@ -34,7 +43,16 @@ export const List = () => {
       render: (r: any) => {
         return (
           <Space size={2}>
-            <Button href={`./message/edit/${r._id}`} type="link" icon={<EditOutlined />} />
+            <ListingButton href={`./message/edit/${r._id}`} icon={<EditOutlined />} tooltipMsg="Edit" />
+            <ListingButton
+              tooltipMsg="Delete"
+              icon={<DeleteOutlined />}
+              onClick={() => handlers.delete(r._id)}
+              additionalProps={{
+                className: "table-column-actions-button",
+                danger: true,
+              }}
+            />
           </Space>
         );
       },
@@ -58,6 +76,20 @@ export const List = () => {
       } finally {
         setLoading(false);
       }
+    },
+    delete: (id: string) => {
+      ui.confirm(`Are you sure you want to delete this message? This will remove the message for receipients and cannot be undone.`, async () => {
+        try {
+          setLoading(true);
+          await api.message.delete(id);
+          ui.notify.success(`Deleted Message`);
+          await handlers.refresh();
+        } catch (err) {
+          ui.notify.error(err);
+        } finally {
+          setLoading(false);
+        }
+      });
     },
   };
 

@@ -5,6 +5,7 @@ import { api, ui } from "@/app/services";
 import { useRouter } from "next/router";
 import { FormProps } from "antd/es/form/Form";
 import { USER_TYPES } from "../../constants";
+import { SelectUser } from "../../components/selectors";
 
 export const MessageBroadcastForm: React.FC<{ id?: string }> = (props) => {
   const { id } = props;
@@ -15,7 +16,6 @@ export const MessageBroadcastForm: React.FC<{ id?: string }> = (props) => {
   const router = useRouter();
 
   const handlers = {
-    init: () => {},
     submit: (values: any) => {
       ui.confirm(`Are you sure you want to submit?`, async () => {
         setLoading(true);
@@ -68,17 +68,17 @@ export const MessageBroadcastForm: React.FC<{ id?: string }> = (props) => {
               <Input.TextArea rows={4} />
             </Form.Item>
             <Form.Item
-              label="Contact No."
-              name="contact"
+              label="Receipients"
+              name="receipient"
               required
               rules={[
                 {
                   required: true,
-                  message: "Contact No. is required.",
+                  message: "Receipients is required.",
                 },
               ]}
             >
-              <Input className="remove-input-num-arrow" type="number" maxLength={11} />
+              <SelectUser />
             </Form.Item>
           </Col>
         </Row>
